@@ -1,0 +1,45 @@
+.resume-bg {
+    position: relative;
+    width: 75%;
+}
+
+.resume-bg img {
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.3) 10px 0px 23px;
+}
+
+.name-title {
+    position: absolute;
+    top: 13%;
+    left: 8%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-name {
+    font-size: 3vw;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: black;
+}
+
+.job-title {
+    font-size: 1.5vw;
+    font-weight: 600;
+    color: rgb(0, 158, 232)
+}
+
+input {
+    border-color: transparent;
+    background: transparent;
+    max-width: 60%;
+}
+
+input[type="text"].job-title::-webkit-input-placeholder {
+    color: rgb(204, 232, 250);
+  }
+
+input:focus {
+    outline: none;
+}
