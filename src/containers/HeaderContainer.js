@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Button, Progress } from '../components'
+import { Button, ProgressBar } from '../components'
 import { SING_IN } from '../constants'
 import '../css/Header.css'
 
@@ -17,8 +17,8 @@ class HeaderContainer extends Component {
                     height="23px"
                     alt="logo"
                 />
-                <Progress progress={progress}/>
-                <Button text={SING_IN} />
+                <ProgressBar progress={progress}/>
+                <Button text="Sign in" />
             </header>
         );
     }

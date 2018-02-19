@@ -3,11 +3,23 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import EmptyResume from '../images/resume-bg.png'
 import FullResume from '../images/full-resume.png'
-import { inputName, inputTitle } from '../actions/resume'
-import { onClickFullName, renderFullResume } from '../actions/footer'
+import {
+    inputName,
+    inputTitle,
+    setShouldRenderJobTitle,
+    setShouldRenderFullResume
+} from '../actions/resume'
 import '../css/Resume.css'
 
 class ResumeContainer extends Component {
+    constructor() {
+        super()
+        this.onFullNameChange = this.onFullNameChange.bind(this)
+        this.onJobTitleChange = this.onJobTitleChange.bind(this)
+        this.onFullNameEnter = this.onFullNameEnter.bind(this)
+        this.onJobTitleEnter = this.onJobTitleEnter.bind(this)
+    }
+
     componentDidUpdate({
         shouldRenderJobTitle : prevShouldRenderJobTitle,
         shouldRenderFullResume: prevShouldRenderFullResume
@@ -23,19 +35,31 @@ class ResumeContainer extends Component {
         }
     }
 
+    onFullNameChange({ target: { value } }) {
+        const { inputName } = this.props
+
+        inputName(value)
+    }
+
+    onJobTitleChange({ target: { value } }) {
+        const { inputTitle } = this.props
+
+        inputTitle(value)
+    }
+
     onFullNameEnter(e) {
-        const { onClickFullName } = this.props
+        const { setShouldRenderJobTitle } = this.props
 
         if (e.key === 'Enter') {
-            onClickFullName()
+            setShouldRenderJobTitle()
         }
     }
 
     onJobTitleEnter(e) {
-        const { renderFullResume } = this.props
+        const { setShouldRenderFullResume } = this.props
 
         if (e.key === 'Enter') {
-            renderFullResume(true)
+            setShouldRenderFullResume(true)
         }
     }
 
@@ -50,8 +74,8 @@ class ResumeContainer extends Component {
                         className="full-name"
                         type="text"
                         value={fullName}
-                        onChange={e => inputName(e.target.value)}
-                        onKeyPress={e => this.onFullNameEnter(e)}
+                        onChange={this.onFullNameChange}
+                        onKeyPress={this.onFullNameEnter}
                         disabled={shouldRenderFullResume}
                         placeholder="YOUR NAME"
                     />
@@ -61,8 +85,8 @@ class ResumeContainer extends Component {
                             className="job-title"
                             type="text"
                             value={jobTitle}
-                            onChange={e => inputTitle(e.target.value)}
-                            onKeyPress={e => this.onJobTitleEnter(e)}
+                            onChange={this.onJobTitleChange}
+                            onKeyPress={this.onJobTitleEnter}
                             disabled={shouldRenderFullResume}
                             placeholder="Your next desired role?"
                         />
@@ -70,10 +94,7 @@ class ResumeContainer extends Component {
                     }
                     
                 </div>
-                { shouldRenderFullResume
-                    ? <img src={FullResume} alt="resume"/>
-                    :  <img src={EmptyResume} alt="resume"/>
-                }
+                <img src={shouldRenderFullResume ? FullResume : EmptyResume} alt="resume" />
             </div>
         );
     }
@@ -89,7 +110,7 @@ export default connect(
     dispatch => bindActionCreators({
         inputName,
         inputTitle,
-        onClickFullName,
-        renderFullResume
+        setShouldRenderJobTitle,
+        setShouldRenderFullResume
     }, dispatch)
 )(ResumeContainer)

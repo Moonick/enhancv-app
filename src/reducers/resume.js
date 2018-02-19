@@ -1,8 +1,8 @@
 import {
     INPUT_NAME,
-    CLICK_FULL_NAME,
     INPUT_TITLE,
-    RENDER_FULL_RESUME,
+    SET_SHOULD_RENDER_JOB_TITLE,
+    SET_SHOULD_RENDER_FULL_RESUME,
     SET_PROGRESS
 } from "../constants";
 
@@ -22,10 +22,10 @@ export default (state = initialState, {type, payload}) => {
         case INPUT_TITLE:
             return { ...state, jobTitle: payload}
         
-        case CLICK_FULL_NAME:
+        case SET_SHOULD_RENDER_JOB_TITLE:
             return { ...state, shouldRenderJobTitle: payload}
 
-        case RENDER_FULL_RESUME:
+        case SET_SHOULD_RENDER_FULL_RESUME:
             return { ...state, shouldRenderFullResume: payload}
 
         case SET_PROGRESS:

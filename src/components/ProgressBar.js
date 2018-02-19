@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { PROGRESS } from '../constants'
-import '../css/Progress.css'
+import '../css/ProgressBar.css'
 
 
-export default class Progress extends Component {
+export default class ProgressBar extends Component {
     getBarWidth() {
         const { progress } = this.props
         
@@ -16,7 +15,7 @@ export default class Progress extends Component {
         const { width } = this.props
         return (
             <div className="progress-bar">
-                <div>{PROGRESS}</div>
+                <div>Progress</div>
                 <div className="status">
                     <div
                         id="fullBar"

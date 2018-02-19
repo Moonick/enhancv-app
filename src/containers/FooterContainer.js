@@ -2,67 +2,102 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Button } from '../components'
-import { onClickFullName, renderFullResume } from '../actions/footer'
-import { setProgress } from '../actions/header'
-import { NEXT, CHANGE_JOB } from '../constants';
+import {
+    setProgress,
+    setShouldRenderJobTitle,
+    setShouldRenderFullResume
+} from '../actions/resume'
 import '../css/Footer.css'
 
 
 class FooterContainer extends Component {
-    renderMessage() {
-        const { fullName, jobTitle, setProgress } = this.props
-        const { onClickFullName, renderFullResume } = this.props
-        const { shouldRenderJobTitle, shouldRenderFullResume } = this.props
+    constructor() {
+        super()
+        this.onFinish = this.onFinish.bind(this)
+        this.onChangeJob = this.onChangeJob.bind(this)
+    }
 
-        if (fullName !== '' && !shouldRenderJobTitle) {
-            setProgress(25)
-            
-            return (
-                <div>
-                    <div className="h1">Well done! Select next to continue.</div>
-                    <Button className="fixed" text={NEXT} onClick={onClickFullName} />
+    onFinish() {
+        const { setShouldRenderFullResume } = this.props
+
+        setShouldRenderFullResume(true)
+    }
+
+    onChangeJob() {
+        const { setShouldRenderFullResume } = this.props
+
+        setShouldRenderFullResume(false)
+    }
+
+    renderWellDoneMessage() {
+        const { setShouldRenderJobTitle } = this.props
+
+        return (
+            <div>
+                <div className="h1">Well done! Select next to continue.</div>
+                <Button className="fixed" text="Next" onClick={setShouldRenderJobTitle} />
+            </div>
+        )
+    }
+
+    renderEnterFullNameMessage() {
+        return (
+            <div>
+                <div className="h1">Now type the next role you are applying for</div>
+                <div className="h2">E.g. Senior Web Developer, Product Manager, CEO, Director of Finance, Retail Manager</div>
                 </div>
             )
         }
         
-        if (fullName !== '' && jobTitle === '' && shouldRenderJobTitle) {
-            return (
-                <div>
-                    <div className="h1">Now type the next role you are applying for</div>
-                    <div className="h2">E.g. Senior Web Developer, Product Manager, CEO, Director of Finance, Retail Manager</div>
+    renderEnterJobTitleMessage() {
+        return (
+            <div>
+                <div className="h1">Enter a specific role. It helps us personalize your resume template to it.</div>
+                <div className="h2">E.g. Senior Web Developer, Product Manager, CEO, Director of Finance, Retail Manager</div>
+                <Button text="Next" onClick={this.onFinish} />
+            </div>
+        )
+    }
+    
+    renderFinalMessage() {
+        const { jobTitle } = this.props
+        return (
+            <div>
+                <div className="h1">Great, your resume is now tailored for a {jobTitle} position</div>
+                <div className="h2">This is not the role you are applying for?
+                    <Button
+                        className='change-job'
+                        text="Change next desired role"
+                        onClick={this.onChangeJob}
+                    />
                 </div>
-            )
+                <Button className="fixed" text="Next"/>
+            </div>
+        ) 
+    }
+
+    renderMessage() {
+        const { fullName, jobTitle, setProgress } = this.props
+        const { shouldRenderFullResume, shouldRenderJobTitle } = this.props
+
+        if (fullName !== '' && jobTitle === '') {
+            setProgress(25)
+            return this.renderWellDoneMessage()
+        }
+        
+        if (fullName !== '' && jobTitle === '' && shouldRenderJobTitle) {
+            return this.renderEnterFullNameMessage()
         }
         
         
         if (fullName !== '' && jobTitle !== '' && !shouldRenderFullResume) {
             setProgress(50)
-
-            return (
-                <div>
-                    <div className="h1">Enter a specific role. It helps us personalize your resume template to it.</div>
-                    <div className="h2">E.g. Senior Web Developer, Product Manager, CEO, Director of Finance, Retail Manager</div>
-                    <Button text={NEXT} onClick={() => renderFullResume(true)} />
-                </div>
-            )
+            return this.renderEnterJobTitleMessage()
         }
 
         if (fullName !== '' && jobTitle !== '' && shouldRenderFullResume) {
             setProgress(100)
-
-            return (
-                <div>
-                    <div className="h1">Great, your resume is now tailored for a {jobTitle} position</div>
-                    <div className="h2">This is not the role you are applying for?
-                        <Button
-                            className='change-job'
-                            text={CHANGE_JOB}
-                            onClick={() => renderFullResume(false)}
-                        />
-                    </div>
-                    <Button className="fixed" text={NEXT} />
-                </div>
-            ) 
+            return this.renderFinalMessage()
         }
 
         setProgress(0)
@@ -88,8 +123,8 @@ export default connect(
         shouldRenderFullResume: resume.shouldRenderFullResume
     }),
     dispatch => bindActionCreators({
-        onClickFullName,
-        renderFullResume,
+        setShouldRenderJobTitle,
+        setShouldRenderFullResume,
         setProgress
     }, dispatch)
 )(FooterContainer)
